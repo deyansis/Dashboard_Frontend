@@ -22,7 +22,6 @@ const Extraccion = () => {
 
   const [fechaFin, setFechaFin] = useState("");
 
-  const [tema, setTema] = useState("");
 
   const [cantidad, setCantidad] = useState("100");
 
@@ -46,8 +45,6 @@ const Extraccion = () => {
         fecha_inicio: fechaInicio,
 
         fecha_fin: fechaFin,
-
-        tema,
 
         cantidad,
 
@@ -100,8 +97,8 @@ const Extraccion = () => {
               setFechaInicio={setFechaInicio}
               fechaFin={fechaFin}
               setFechaFin={setFechaFin}
-              tema={tema}
-              setTema={setTema}
+            
+              
               cantidad={cantidad}
               setCantidad={setCantidad}
               filtroSentimiento={filtroSentimiento}

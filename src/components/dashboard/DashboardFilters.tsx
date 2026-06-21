@@ -149,21 +149,21 @@ const DashboardFilters = ({
               </option>
 
               <option
-                value="alta"
+                value="ALTA"
                 className="bg-[#091a38]"
               >
                 Alta
               </option>
 
               <option
-                value="media"
+                value="MEDIA"
                 className="bg-[#091a38]"
               >
                 Media
               </option>
 
               <option
-                value="baja"
+                value="BAJA"
                 className="bg-[#091a38]"
               >
                 Baja

@@ -9,9 +9,8 @@ import { getSummaryData } from "../../services/dashboardService";
 
 interface SummaryData {
   total_comentarios: number;
-  comentarios_analizados: number;
-  porcentaje_analizado: number;
   ultima_fecha: string;
+  sentimiento_predominante: string;
 }
 
 interface Filters {
@@ -67,6 +66,7 @@ const DashboardSummary = ({
       : "...";
 
   return (
+
     <div className="bg-[#071b3a] rounded-2xl p-4 border border-white/5 h-[250px]">
 
       <h3 className="text-white font-semibold text-sm mb-5">
@@ -74,6 +74,8 @@ const DashboardSummary = ({
       </h3>
 
       <div className="space-y-1">
+
+        {/* TOTAL COMENTARIOS */}
 
         <div className="flex items-center justify-between">
 
@@ -102,6 +104,8 @@ const DashboardSummary = ({
 
         <div className="border-t border-slate-700" />
 
+        {/* SENTIMIENTO PREDOMINANTE */}
+
         <div className="flex items-center justify-between">
 
           <div className="flex items-center gap-3">
@@ -116,19 +120,32 @@ const DashboardSummary = ({
             </div>
 
             <span className="text-slate-200 text-sm">
-              Comentarios analizados
+              Sentimiento predominante
             </span>
 
           </div>
 
-          <span className="text-white text-sm font-semibold">
-            {summary?.comentarios_analizados ?? "..."} (
-            {summary?.porcentaje_analizado ?? "..."}%)
+          <span
+            className={`
+              text-sm
+              font-semibold
+              ${
+                summary?.sentimiento_predominante === "Positivo"
+                  ? "text-green-400"
+                  : summary?.sentimiento_predominante === "Negativo"
+                  ? "text-red-400"
+                  : "text-yellow-400"
+              }
+            `}
+          >
+            {summary?.sentimiento_predominante ?? "..."}
           </span>
 
         </div>
 
         <div className="border-t border-slate-700" />
+
+        {/* ÚLTIMA EXTRACCIÓN */}
 
         <div className="flex items-center justify-between">
 
@@ -157,6 +174,8 @@ const DashboardSummary = ({
 
         <div className="border-t border-slate-700" />
 
+        {/* FUENTE */}
+
         <div className="flex items-center justify-between">
 
           <div className="flex items-center gap-3">
@@ -178,7 +197,9 @@ const DashboardSummary = ({
       </div>
 
     </div>
+
   );
+
 };
 
 export default DashboardSummary;

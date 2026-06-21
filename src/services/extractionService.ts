@@ -8,7 +8,7 @@ interface ExtractionFilters {
 
   fecha_fin: string;
 
-  tema: string;
+  
 
   cantidad: string;
 
@@ -107,4 +107,3 @@ export const getComments =
     return response.json();
 
   };
-  

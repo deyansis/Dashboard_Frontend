@@ -20,10 +20,7 @@ interface ExtractionConfigProps {
     React.SetStateAction<string>
   >;
 
-  tema: string;
-  setTema: React.Dispatch<
-    React.SetStateAction<string>
-  >;
+ 
 
   cantidad: string;
   setCantidad: React.Dispatch<
@@ -49,8 +46,7 @@ const ExtractionConfig = ({
   fechaFin,
   setFechaFin,
 
-  tema,
-  setTema,
+ 
 
   cantidad,
   setCantidad,
@@ -98,7 +94,7 @@ const ExtractionConfig = ({
 
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
 
         {/* Plataforma */}
 
@@ -184,35 +180,6 @@ const ExtractionConfig = ({
               outline-none
             "
           />
-
-        </div>
-{/* TEMA */}
-
-<div>
-
-  <label className="text-slate-300 text-sm block mb-2">
-    Tema de análisis
-  </label>
-
-  <input
-    type="text"
-    value={tema}
-    onChange={(e) =>
-      setTema(e.target.value)
-    }
-    placeholder="Municipalidad"
-    className="
-      w-full
-      h-10
-      rounded-xl
-      border
-      border-slate-700
-      bg-[#091a38]
-      px-4
-      text-white
-      outline-none
-    "
-  />
 
 </div>
 

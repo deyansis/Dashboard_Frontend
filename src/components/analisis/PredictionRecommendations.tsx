@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import {
   Brain,
   Megaphone,
@@ -6,11 +8,163 @@ import {
   BarChart3,
 } from "lucide-react";
 
+import { supabase } from "../../services/supabase";
+
+interface Recommendation {
+  titulo: string;
+  descripcion: string;
+  impacto: string;
+  icono: React.ReactNode;
+  color: string;
+  bg: string;
+}
+
 const PredictionRecommendations = () => {
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+
+  useEffect(() => {
+    let activo = true;
+
+    const cargarDatos = async () => {
+      const { data, error } = await supabase
+        .from("comentarios")
+        .select("tema, sentimiento");
+
+      if (error || !data) {
+        console.error(error);
+        return;
+      }
+
+      const temas: Record<
+        string,
+        {
+          total: number;
+          positivos: number;
+          negativos: number;
+        }
+      > = {};
+
+      data.forEach((item) => {
+        const tema = item.tema || "Otros";
+
+        if (!temas[tema]) {
+          temas[tema] = {
+            total: 0,
+            positivos: 0,
+            negativos: 0,
+          };
+        }
+
+        temas[tema].total++;
+
+        if (item.sentimiento === "positivo") {
+          temas[tema].positivos++;
+        }
+
+        if (item.sentimiento === "negativo") {
+          temas[tema].negativos++;
+        }
+      });
+
+      const temasArray = Object.entries(temas);
+
+      const temaMasNegativo = [...temasArray].sort(
+        (a, b) => b[1].negativos - a[1].negativos,
+      )[0];
+
+      const temaMasComentado = [...temasArray].sort(
+        (a, b) => b[1].total - a[1].total,
+      )[0];
+
+      const temasPositivos = [...temasArray].sort(
+        (a, b) =>
+          b[1].positivos - b[1].negativos - (a[1].positivos - a[1].negativos),
+      );
+
+      const temaMasPositivo = temasPositivos.find(
+        (tema) =>
+          tema[0] !== temaMasComentado?.[0] && tema[0] !== temaMasNegativo?.[0],
+      );
+
+      const nuevasRecomendaciones: Recommendation[] = [
+        {
+          titulo: "Fortalecer acciones correctivas",
+
+          descripcion: `Incrementar las intervenciones relacionadas con ${
+            temaMasNegativo?.[0] || "el tema identificado"
+          } para reducir la percepción negativa detectada.`,
+
+          impacto: "Impacto alto",
+
+          icono: <Shield size={24} className="text-red-400" />,
+
+          color: "text-red-400",
+
+          bg: "bg-red-500/20",
+        },
+
+        {
+          titulo: "Priorizar atención ciudadana",
+
+          descripcion: `${
+            temaMasComentado?.[0] || "el tema identificado"
+          } concentra una alta participación ciudadana y requiere seguimiento constante.`,
+
+          impacto: "Impacto alto",
+
+          icono: <Megaphone size={24} className="text-blue-400" />,
+
+          color: "text-blue-400",
+
+          bg: "bg-blue-500/20",
+        },
+
+        {
+          titulo: "Mantener buenas prácticas",
+
+          descripcion: `${
+            temaMasPositivo?.[0] || "el tema identificado"
+          } presenta un balance favorable entre opiniones positivas y negativas.`,
+
+          impacto: "Impacto medio",
+
+          icono: <MessageCircle size={24} className="text-green-400" />,
+
+          color: "text-green-400",
+
+          bg: "bg-green-500/20",
+        },
+
+        {
+          titulo: "Monitoreo continuo",
+
+          descripcion:
+            "Continuar evaluando la evolución de los comentarios ciudadanos para detectar cambios tempranos en la percepción pública.",
+
+          impacto: "Impacto medio",
+
+          icono: <BarChart3 size={24} className="text-yellow-400" />,
+
+          color: "text-yellow-400",
+
+          bg: "bg-yellow-500/20",
+        },
+      ];
+
+      if (activo) {
+        setRecommendations(nuevasRecomendaciones);
+      }
+    };
+
+    cargarDatos();
+
+    return () => {
+      activo = false;
+    };
+  }, []);
+
   return (
     <div className="bg-[#071b3a] rounded-2xl p-4 border border-white/5 shadow-xl mt-4">
-      {/* Header */}
-
       <div className="flex items-center gap-3 mb-4">
         <Brain size={20} className="text-cyan-400" />
 
@@ -18,8 +172,6 @@ const PredictionRecommendations = () => {
           Recomendaciones generadas por IA
         </h2>
       </div>
-
-      {/* Cards */}
 
       <div
         className="
@@ -30,127 +182,56 @@ const PredictionRecommendations = () => {
           gap-4
         "
       >
-        {/* Card 1 */}
+        {recommendations.map((item, index) => (
+          <div
+            key={index}
+            className="
+                bg-[#091a38]
+                border
+                border-white/5
+                rounded-2xl
+                p-3
+              "
+          >
+            <div className="flex gap-4">
+              <div
+                className={`
+                    w-14
+                    h-14
+                    rounded-full
+                    flex
+                    items-center
+                    justify-center
+                    shrink-0
+                    mt-1
+                    ${item.bg}
+                  `}
+              >
+                {item.icono}
+              </div>
 
-        <div className="bg-[#091a38] border border-white/5 rounded-2xl p-2">
-          <div className="flex gap-4">
-            <div
-              className="
-        w-14
-        h-14
-        rounded-full
-        bg-green-500/20
-        flex
-        items-center
-        justify-center
-        shrink-0
-        mt-2
-      "
-            >
-              <Megaphone size={24} className="text-green-400" />
-            </div>
+              <div>
+                <h3 className="text-white font-semibold mb-2">{item.titulo}</h3>
 
-            <div className="flex-1">
-              <h3 className="text-white font-semibold text-lm mb-2">
-                Reforzar campañas informativas
-              </h3>
+                <p className="text-slate-400 text-sm leading-6 mb-3">
+                  {item.descripcion}
+                </p>
 
-              <p className="text-slate-400 text-sm leading-6 mb-4">
-                Comunicar avances y obras en ejecución para mantener la
-                percepción positiva.
-              </p>
-
-              <span className="px-3 py-0 rounded-lg bg-green-500/10 text-green-400 text-xs">
-                Impacto alto
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2 */}
-
-        <div className="bg-[#091a38] border border-white/5 rounded-2xl p-2">
-          <div className="flex gap-4">
-            <div
-              className="
-        w-14
-        h-14
-        rounded-full
-        bg-blue-500/20
-        flex
-        items-center
-        justify-center
-        shrink-0
-        mt-2
-      "
-            >
-              <Shield size={24} className="text-blue-400" />
-            </div>
-
-            <div className="flex-1">
-              <h3 className="text-white font-semibold text-lm mb-2">
-                Atender reclamos de seguridad
-              </h3>
-
-              <p className="text-slate-400 text-sm leading-6 mb-4">
-                Priorizar la atención de quejas relacionadas a seguridad
-                ciudadana.
-              </p>
-
-              <span className="px-3 py-0 rounded-lg bg-blue-500/10 text-blue-400 text-xs">
-                Impacto alto
-              </span>
+                <span
+                  className={`
+                      px-3
+                      py-1
+                      rounded-lg
+                      text-xs
+                      ${item.color}
+                    `}
+                >
+                  {item.impacto}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Card 3 */}
-
-        <div className="bg-[#091a38] border border-white/5 rounded-2xl p-2">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
-              <MessageCircle size={18} className="text-purple-400" />
-            </div>
-
-            <div className="flex-1">
-              <h3 className="text-white font-semibold text-lm leading-tight">
-                Monitorear temas sensibles
-              </h3>
-
-              <p className="text-slate-400 text-sm mt-2 leading-5">
-                Realizar seguimiento continuo de temas de limpieza pública y
-                medio ambiente.
-              </p>
-
-              <span className="inline-block mt-3 px-3 py-0 rounded-lg bg-purple-500/10 text-purple-400 text-xs">
-                Impacto medio
-              </span>
-            </div>
-          </div>
-        </div>
-        {/* Card 4 */}
-
-        <div className="bg-[#091a38] border border-white/5 rounded-2xl p-2 min-h-[160px]">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center shrink-0">
-              <BarChart3 size={18} className="text-yellow-400" />
-            </div>
-
-            <div className="flex-1">
-              <h3 className="text-white font-semibold text-lm leading-tight">
-                Aumentar presencia digital
-              </h3>
-
-              <p className="text-slate-400 text-sm mt-2 leading-5">
-                Mayor interacción en redes sociales durante fines de semana.
-              </p>
-
-              <span className="inline-block mt-3 px-3 py-0 rounded-lg bg-yellow-500/10 text-yellow-400 text-xs">
-                Impacto medio
-              </span>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
