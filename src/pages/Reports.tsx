@@ -3,9 +3,17 @@ import ReportKPIs from "../components/reportes/ReportesKPIs";
 import ReportGenerator from "../components/reportes/ReportGenerator";
 import ReportHistory from "../components/reportes/ReportHistory";
 
+import { useState } from "react";
+
 const Reports = () => {
+
+  const [reloadReports, setReloadReports] =
+    useState(false);
+
   return (
+
     <div className="min-h-screen bg-[#050B1F] flex">
+
       <Sidebar />
 
       <main
@@ -17,30 +25,58 @@ const Reports = () => {
           overflow-x-hidden
         "
       >
+
         <div className="mb-6">
-          <h1 className="text-4xl font-bold text-white">Reportes</h1>
+
+          <h1 className="text-4xl font-bold text-white">
+            Reportes
+          </h1>
 
           <p className="text-slate-400 mt-2">
             Genera y administra reportes de análisis de percepción ciudadana.
           </p>
+
         </div>
 
-        <ReportKPIs />
-
-       
+        <ReportKPIs
+          reload={reloadReports}
+        />
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-4">
+
           <div className="xl:col-span-4">
-            <ReportGenerator />
+
+            <ReportGenerator
+              onReportCreated={() =>
+                setReloadReports(
+                  (prev) => !prev
+                )
+              }
+            />
+
           </div>
 
           <div className="xl:col-span-8">
-            <ReportHistory />
+
+            <ReportHistory
+              reload={reloadReports}
+              onReportDeleted={() =>
+                setReloadReports(
+                  (prev) => !prev
+                )
+              }
+            />
+
           </div>
+
         </div>
+
       </main>
+
     </div>
+
   );
+
 };
 
 export default Reports;

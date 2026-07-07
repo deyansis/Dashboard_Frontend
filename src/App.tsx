@@ -1,44 +1,156 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
-import Analisis from "./pages/analisis";
 import Dashboard from "./pages/dashboard";
+import Analisis from "./pages/analisis";
 import Extraccion from "./pages/extraccion";
 import Comments from "./pages/Comments";
 import Reports from "./pages/Reports";
-import Settings from "./pages/Settings";
-import ProfileSettings from "./pages/ProfileSettings";
-import GeneralSettings from "./pages/GeneralSettings";
-import NotificationSettings from "./pages/NotificationSettings";
-import SecuritySettings from "./pages/SecuritySettings";
+
+// Login
+
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/login/ProtectedRoute";
+
+
+// Configuración
+import Settings from "./pages/Configuration/Settings";
+import GeneralSettings from "./pages/Configuration/GeneralSettings";
+import ModelSettings from "./pages/Configuration/ModelSettings";
+import ProfileSettings from "./pages/Configuration/ProfileSettings";
+
+
 
 function App() {
+
+  
+
   return (
     <BrowserRouter>
       <Routes>
 
-  <Route path="/" element={<Dashboard />} />
+        {/* LOGIN */}
 
-  <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+  path="/"
+  element={<Navigate to="/login" replace />}
+/>
 
-  <Route path="/analisis" element={<Analisis />} />
+<Route
+  path="/login"
+  element={<Login />}
+/>
 
-  <Route path="/extraccion" element={<Extraccion />} />
+        
 
-  <Route path="/comments" element={<Comments />} />
+        {/* DASHBOARD */}
 
-  <Route path="/reports" element={<Reports />} />
+        <Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  }
+/>
 
-  <Route path="/settings" element={<Settings />} />
+        {/* ANÁLISIS */}
 
-  <Route path="/profile-settings" element={<ProfileSettings />} />
+        <Route
+  path="/analisis"
+  element={
+    <ProtectedRoute>
+      <Analisis />
+    </ProtectedRoute>
+  }
+/>
 
-  <Route path="/general-settings" element={<GeneralSettings />} />
+        {/* EXTRACCIÓN */}
 
-  <Route path="/notification-settings" element={<NotificationSettings />} />
+        <Route
+          path="/extraccion"
+          element={
+            <ProtectedRoute>
+              <Extraccion />
+            </ProtectedRoute>
+          }
+        />
 
-  <Route path="/security-settings" element={<SecuritySettings />} />
+        {/* COMENTARIOS */}
 
-</Routes>
+        <Route
+          path="/comments"
+          element={
+            <ProtectedRoute>
+              <Comments />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* REPORTES */}
+
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <Reports />
+            </ProtectedRoute>
+          }
+        />
+
+              
+
+        {/* CONFIGURACIÓN */}
+
+        <Route
+  path="/settings"
+  element={
+    <ProtectedRoute>
+      <Settings />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/settings/general"
+  element={
+    <ProtectedRoute>
+      <GeneralSettings />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/settings/model"
+  element={
+    <ProtectedRoute>
+      <ModelSettings />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/settings/profile"
+  element={
+    <ProtectedRoute>
+      <ProfileSettings />
+    </ProtectedRoute>
+  }
+/>
+
+        
+        {/* CUALQUIER OTRA RUTA */}
+<Route
+  path="*"
+  element={<Navigate to="/login" replace />}
+/>
+        
+
+      </Routes>
     </BrowserRouter>
   );
 }

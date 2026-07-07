@@ -4,7 +4,9 @@ import CommentsFilters from "../components/comments/CommentsFilters";
 import CommentsTable from "../components/comments/CommentsTable";
 import CommentDetail from "../components/comments/CommentDetail";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+import toast from "react-hot-toast";
 
 import { getComments } from "../services/extractionService";
 
@@ -17,72 +19,119 @@ interface Comentario {
 }
 
 const Comments = () => {
+
   const [comentarios, setComentarios] = useState<Comentario[]>([]);
+
   const [comentarioSeleccionado, setComentarioSeleccionado] =
     useState<Comentario | null>(null);
 
   const [busqueda, setBusqueda] = useState("");
-  const [sentimientoFiltro, setSentimientoFiltro] = useState("todos");
-  const [prioridadFiltro, setPrioridadFiltro] = useState("todas");
-  const [fechaInicio, setFechaInicio] = useState("");
-  const [fechaFin, setFechaFin] = useState("");
 
-  useEffect(() => {
-    let activo = true;
+  const [sentimientoFiltro, setSentimientoFiltro] =
+    useState("todos");
 
-    const cargarDatos = async () => {
-      try {
-        const response = await getComments();
+  const [fechaInicio, setFechaInicio] =
+    useState("");
 
-        if (activo) {
-          setComentarios(response?.comentarios || []);
-        }
-      } catch (error) {
-        console.error(
-          "Error al cargar comentarios:",
-          error
+  const [fechaFin, setFechaFin] =
+    useState("");
+
+  // ==================================
+  // CONSULTAR COMENTARIOS
+  // ==================================
+
+  const handleConsultar = async () => {
+
+    if (!fechaInicio || !fechaFin) {
+
+      toast.error(
+        "Seleccione una fecha de inicio y una fecha de fin."
+      );
+
+      return;
+
+    }
+
+    if (fechaInicio > fechaFin) {
+
+      toast.error(
+        "La fecha de inicio no puede ser mayor que la fecha de fin."
+      );
+
+      return;
+
+    }
+
+    try {
+
+      const response = await getComments({
+
+        fecha_inicio: fechaInicio,
+
+        fecha_fin: fechaFin,
+
+        cantidad: "1000",
+
+        sentimiento: sentimientoFiltro,
+
+      });
+
+      console.log("Respuesta:", response);
+
+      setComentarios(
+        response.comentarios ?? []
+      );
+
+      if (
+        !response.comentarios ||
+        response.comentarios.length === 0
+      ) {
+
+        toast(
+          "No se encontraron comentarios para los filtros seleccionados."
         );
+
+      } else {
+
+        toast.success(
+          "Comentarios cargados correctamente."
+        );
+
       }
-    };
 
-    cargarDatos();
+    } catch (error) {
 
-    return () => {
-      activo = false;
-    };
-  }, []);
+      console.error(error);
 
-  const comentariosFiltrados = comentarios.filter((item) => {
-    const coincideBusqueda = item.comentario
-      .toLowerCase()
-      .includes(busqueda.toLowerCase());
+      toast.error(
+        "Error al consultar los comentarios."
+      );
 
-    const coincideSentimiento =
-      sentimientoFiltro === "todos"
-        ? true
-        : item.sentimiento === sentimientoFiltro;
+    }
 
-    const coincidePrioridad =
-      prioridadFiltro === "todas"
-        ? true
-        : item.prioridad === prioridadFiltro;
+  };
 
-    const coincideFecha =
-      (!fechaInicio ||
-        item.fecha_registro.substring(0, 10) >= fechaInicio) &&
-      (!fechaFin ||
-        item.fecha_registro.substring(0, 10) <= fechaFin);
+  // ==================================
+  // FILTRO DE BÚSQUEDA
+  // ==================================
 
-    return (
-      coincideBusqueda &&
-      coincideSentimiento &&
-      coincidePrioridad &&
-      coincideFecha
+  const listaComentarios = Array.isArray(comentarios)
+    ? comentarios
+    : [];
+
+  const comentariosFiltrados =
+    listaComentarios.filter((item) =>
+      item.comentario
+        .toLowerCase()
+        .includes(
+          busqueda.toLowerCase()
+        )
     );
-  });
 
   return (
+
     <div className="min-h-screen bg-[#050B1F] flex">
+
       <Sidebar />
 
       <main
@@ -94,7 +143,9 @@ const Comments = () => {
           overflow-x-hidden
         "
       >
+
         <div className="mb-5">
+
           <h1 className="text-4xl font-bold text-white">
             Gestión de Comentarios
           </h1>
@@ -103,41 +154,53 @@ const Comments = () => {
             Administra y clasifica los comentarios extraídos mediante
             inteligencia artificial.
           </p>
+
         </div>
 
-        <CommentsKPIs comentarios={comentarios} />
+        <CommentsKPIs
+          comentarios={listaComentarios}
+        />
 
         <CommentsFilters
           busqueda={busqueda}
           setBusqueda={setBusqueda}
           sentimientoFiltro={sentimientoFiltro}
           setSentimientoFiltro={setSentimientoFiltro}
-          prioridadFiltro={prioridadFiltro}
-          setPrioridadFiltro={setPrioridadFiltro}
           fechaInicio={fechaInicio}
           setFechaInicio={setFechaInicio}
           fechaFin={fechaFin}
           setFechaFin={setFechaFin}
+          onConsultar={handleConsultar}
         />
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-4">
+
           <div className="xl:col-span-9">
+
             <CommentsTable
               comentarios={comentariosFiltrados}
               setComentarios={setComentarios}
               setComentarioSeleccionado={setComentarioSeleccionado}
             />
+
           </div>
 
           <div className="xl:col-span-3">
+
             <CommentDetail
               comentario={comentarioSeleccionado}
             />
+
           </div>
+
         </div>
+
       </main>
+
     </div>
+
   );
+
 };
 
 export default Comments;

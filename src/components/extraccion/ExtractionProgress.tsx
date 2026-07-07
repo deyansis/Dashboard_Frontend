@@ -102,25 +102,47 @@ const ExtractionProgress = ({
         <div className="space-y-1">
 
           <div className="flex justify-between">
-            <span className="text-slate-300">
-              🟢 Conectando a la API
-            </span>
+  <span className="text-slate-300">
+    🟢 Conectando a la API
+  </span>
 
-            <span className="text-green-400">
-              Completado
-            </span>
-          </div>
+  <span
+    className={
+      completed
+        ? "text-green-400"
+        : loading
+        ? "text-blue-400"
+        : "text-slate-400"
+    }
+  >
+    {completed
+      ? "Completado"
+      : loading
+      ? "Conectando..."
+      : "Pendiente"}
+  </span>
+</div>
+         <div className="flex justify-between">
+  <span className="text-slate-300">
+    🟢 Buscando comentarios
+  </span>
 
-          <div className="flex justify-between">
-            <span className="text-slate-300">
-              🟢 Buscando comentarios
-            </span>
-
-            <span className="text-green-400">
-              Completado
-            </span>
-          </div>
-
+  <span
+    className={
+      completed
+        ? "text-green-400"
+        : loading
+        ? "text-blue-400"
+        : "text-slate-400"
+    }
+  >
+    {completed
+      ? "Completado"
+      : loading
+      ? "Buscando..."
+      : "Pendiente"}
+  </span>
+</div>
           <div className="flex justify-between">
             <span className="text-slate-300">
               🔵 Extrayendo comentarios

@@ -8,11 +8,9 @@ import PredictionTrends from "../components/analisis/PredictionTrends";
 import PredictionRisks from "../components/analisis/PredictionRisks";
 import PredictionRecommendations from "../components/analisis/PredictionRecommendations";
 
-
 import { supabase } from "../services/supabase";
 
 const Analisis = () => {
-
   const [sentimiento, setSentimiento] =
     useState("Analizando");
 
@@ -23,118 +21,92 @@ const Analisis = () => {
     useState("+0%");
 
   const obtenerIndicadores = async () => {
+    try {
+      const { data, error } =
+        await supabase
+          .from("comentarios")
+          .select("*");
 
-    const { data, error } =
-      await supabase
-        .from("comentarios")
-        .select("*");
+      if (error) {
+        console.error(error);
+        return;
+      }
 
-    if (error || !data) return;
+      if (!data || data.length === 0) {
+        setSentimiento("Sin datos");
+        setRiesgo("Bajo");
+        setTendencia("0%");
+        return;
+      }
 
-    const total = data.length;
+      const total = data.length;
 
-    const positivos =
-      data.filter(
-        (item) =>
-          item.sentimiento?.toLowerCase() ===
-          "positivo"
-      ).length;
+      const positivos =
+        data.filter(
+          (item) =>
+            item.sentimiento?.toLowerCase() ===
+            "positivo"
+        ).length;
 
-    const negativos =
-      data.filter(
-        (item) =>
-          item.sentimiento?.toLowerCase() ===
-          "negativo"
-      ).length;
+      const negativos =
+        data.filter(
+          (item) =>
+            item.sentimiento?.toLowerCase() ===
+            "negativo"
+        ).length;
 
-    const neutrales =
-      data.filter(
-        (item) =>
-          item.sentimiento?.toLowerCase() ===
-          "neutral"
-      ).length;
+      // Sentimiento esperado
 
-    // Sentimiento esperado
+      if (positivos > negativos) {
+        setSentimiento("Positivo");
+      } else if (negativos > positivos) {
+        setSentimiento("Negativo");
+      } else {
+        setSentimiento("Neutral");
+      }
 
-    if (positivos > negativos) {
+      // Riesgo actual
 
-      setSentimiento(
-        "Positivo"
-      );
+      const porcentajeNegativo =
+        total > 0
+          ? (negativos / total) * 100
+          : 0;
 
-    } else if (
-      negativos > positivos
-    ) {
+      if (porcentajeNegativo > 40) {
+        setRiesgo("Alto");
+      } else if (porcentajeNegativo > 20) {
+        setRiesgo("Medio");
+      } else {
+        setRiesgo("Bajo");
+      }
 
-      setSentimiento(
-        "Negativo"
-      );
+      // Tendencia
 
-    } else {
+      const isn =
+        total > 0
+          ? ((positivos - negativos) / total) * 100
+          : 0;
 
-      setSentimiento(
-        "Neutral"
-      );
-
+      if (isn >= 0) {
+        setTendencia(
+          `+${isn.toFixed(1)}%`
+        );
+      } else {
+        setTendencia(
+          `${isn.toFixed(1)}%`
+        );
+      }
+    } catch (error) {
+      console.error(error);
     }
-
-    // Riesgo actual
-
-    const porcentajeNegativo =
-      (negativos / total) * 100;
-
-    if (
-      porcentajeNegativo > 40
-    ) {
-
-      setRiesgo("Alto");
-
-    } else if (
-      porcentajeNegativo > 20
-    ) {
-
-      setRiesgo("Medio");
-
-    } else {
-
-      setRiesgo("Bajo");
-
-    }
-
-    // Tendencia
-
-    const isn =
-      (
-        (positivos - negativos) /
-        total
-      ) * 100;
-
-    if (isn > 0) {
-
-      setTendencia(
-        `+${isn.toFixed(1)}%`
-      );
-
-    } else {
-
-      setTendencia(
-        `${isn.toFixed(1)}%`
-      );
-
-    }
-
   };
 
   useEffect(() => {
-
-    obtenerIndicadores();
-
+    void obtenerIndicadores();
   }, []);
 
   return (
-
     <div className="min-h-screen bg-[#050B1F] flex">
-
       <Sidebar />
 
       <main
@@ -146,9 +118,7 @@ const Analisis = () => {
           overflow-x-hidden
         "
       >
-
         <div className="mb-4">
-
           <h1 className="text-4xl font-bold text-white">
             Análisis Predictivo
           </h1>
@@ -157,7 +127,6 @@ const Analisis = () => {
             Predicción inteligente de la percepción ciudadana mediante modelos
             de Machine Learning.
           </p>
-
         </div>
 
         <PredictionKPIs
@@ -167,28 +136,19 @@ const Analisis = () => {
         />
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-4">
-
           <div className="xl:col-span-7">
             <PredictionChart />
           </div>
 
           <div className="xl:col-span-5 space-y-2">
-
             <PredictionTrends />
-
             <PredictionRisks />
-
           </div>
-
         </div>
 
         <PredictionRecommendations />
-       
-
       </main>
-
     </div>
-
   );
 };
 

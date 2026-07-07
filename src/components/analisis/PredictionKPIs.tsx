@@ -16,7 +16,24 @@ const PredictionKPIs = ({
   riesgo,
   tendencia,
 }: PredictionKPIsProps) => {
+
+  const cardClass = `
+    bg-[#071b3a]
+    rounded-2xl
+    p-4
+    border
+    border-white/5
+    shadow-xl
+    transition-all
+    duration-300
+    hover:-translate-y-1
+    hover:scale-[1.02]
+    hover:shadow-2xl
+    cursor-default
+  `;
+
   return (
+
     <div
       className="
         grid
@@ -27,11 +44,12 @@ const PredictionKPIs = ({
         mb-4
       "
     >
+
       {/* Precisión */}
 
-      <div className="bg-[#071b3a] rounded-2xl p-2 border border-white/5 shadow-xl">
+      <div className={cardClass}>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4">
 
           <div
             className="
@@ -45,10 +63,12 @@ const PredictionKPIs = ({
               shadow-[0_0_20px_rgba(59,130,246,0.35)]
             "
           >
+
             <Target
               size={30}
               className="text-blue-400"
             />
+
           </div>
 
           <div>
@@ -73,7 +93,7 @@ const PredictionKPIs = ({
 
       {/* Sentimiento esperado */}
 
-      <div className="bg-[#071b3a] rounded-2xl p-2 border border-white/5 shadow-xl">
+      <div className={cardClass}>
 
         <div className="flex items-center gap-4">
 
@@ -89,10 +109,12 @@ const PredictionKPIs = ({
               shadow-[0_0_20px_rgba(34,197,94,0.35)]
             "
           >
+
             <Smile
               size={30}
               className="text-green-400"
             />
+
           </div>
 
           <div>
@@ -106,11 +128,13 @@ const PredictionKPIs = ({
             </h2>
 
             <p className="text-slate-400 text-sm mt-2">
+
               {sentimiento === "Positivo"
                 ? "Tendencia favorable"
                 : sentimiento === "Negativo"
                 ? "Tendencia desfavorable"
                 : "Comportamiento estable"}
+
             </p>
 
           </div>
@@ -121,7 +145,7 @@ const PredictionKPIs = ({
 
       {/* Riesgo */}
 
-      <div className="bg-[#071b3a] rounded-2xl p-2 border border-white/5 shadow-xl">
+      <div className={cardClass}>
 
         <div className="flex items-center gap-4">
 
@@ -137,10 +161,12 @@ const PredictionKPIs = ({
               shadow-[0_0_20px_rgba(245,158,11,0.35)]
             "
           >
+
             <ShieldAlert
               size={30}
               className="text-yellow-400"
             />
+
           </div>
 
           <div>
@@ -154,11 +180,13 @@ const PredictionKPIs = ({
             </h2>
 
             <p className="text-slate-400 text-sm mt-2">
+
               {riesgo === "Alto"
                 ? "Se requiere atención inmediata"
                 : riesgo === "Medio"
                 ? "Monitoreo recomendado"
                 : "Sin alertas críticas"}
+
             </p>
 
           </div>
@@ -167,9 +195,9 @@ const PredictionKPIs = ({
 
       </div>
 
-      {/* Tendencia */}
+      {/* Próxima semana */}
 
-      <div className="bg-[#071b3a] rounded-2xl p-2 border border-white/5 shadow-xl">
+      <div className={cardClass}>
 
         <div className="flex items-center gap-4">
 
@@ -185,10 +213,12 @@ const PredictionKPIs = ({
               shadow-[0_0_20px_rgba(168,85,247,0.35)]
             "
           >
+
             <TrendingUp
               size={30}
               className="text-purple-400"
             />
+
           </div>
 
           <div>
@@ -212,7 +242,9 @@ const PredictionKPIs = ({
       </div>
 
     </div>
+
   );
+
 };
 
 export default PredictionKPIs;

@@ -1,8 +1,8 @@
 import {
   MessageSquare,
   Smile,
+  Meh,
   Frown,
-  AlertTriangle,
 } from "lucide-react";
 
 interface Comentario {
@@ -31,6 +31,13 @@ const CommentsKPIs = ({
         "positivo"
     ).length;
 
+  const neutrales =
+  comentarios.filter(
+    (item) =>
+      item.sentimiento ===
+      "neutral"
+  ).length;
+
   const negativos =
     comentarios.filter(
       (item) =>
@@ -38,12 +45,7 @@ const CommentsKPIs = ({
         "negativo"
     ).length;
 
-  const prioridadAlta =
-    comentarios.filter(
-      (item) =>
-        item.prioridad ===
-        "alta"
-    ).length;
+ 
 
   const porcentajePositivos =
     total > 0
@@ -52,6 +54,13 @@ const CommentsKPIs = ({
           100
         ).toFixed(1)
       : "0";
+  const porcentajeNeutrales =
+  total > 0
+    ? (
+        (neutrales / total) *
+        100
+      ).toFixed(1)
+    : "0";
 
   const porcentajeNegativos =
     total > 0
@@ -61,14 +70,7 @@ const CommentsKPIs = ({
         ).toFixed(1)
       : "0";
 
-  const porcentajeAlta =
-    total > 0
-      ? (
-          (prioridadAlta /
-            total) *
-          100
-        ).toFixed(1)
-      : "0";
+  
 
   return (
     <div
@@ -83,7 +85,20 @@ const CommentsKPIs = ({
     >
       {/* Total comentarios */}
 
-      <div className="bg-[#071b3a] rounded-2xl p-5 border border-white/5 shadow-xl">
+      <div className="
+  bg-[#071b3a]
+  rounded-2xl
+  p-5
+  border
+  border-white/5
+  shadow-xl
+  transition-all
+  duration-300
+  hover:-translate-y-1
+  hover:scale-[1.02]
+  hover:shadow-2xl
+  cursor-default
+">
 
         <div className="flex items-center gap-4">
 
@@ -127,7 +142,20 @@ const CommentsKPIs = ({
 
       {/* Positivos */}
 
-      <div className="bg-[#071b3a] rounded-2xl p-5 border border-white/5 shadow-xl">
+      <div className="
+  bg-[#071b3a]
+  rounded-2xl
+  p-5
+  border
+  border-white/5
+  shadow-xl
+  transition-all
+  duration-300
+  hover:-translate-y-1
+  hover:scale-[1.02]
+  hover:shadow-2xl
+  cursor-default
+">
 
         <div className="flex items-center gap-4">
 
@@ -171,7 +199,20 @@ const CommentsKPIs = ({
 
       {/* Negativos */}
 
-      <div className="bg-[#071b3a] rounded-2xl p-5 border border-white/5 shadow-xl">
+      <div className="
+  bg-[#071b3a]
+  rounded-2xl
+  p-5
+  border
+  border-white/5
+  shadow-xl
+  transition-all
+  duration-300
+  hover:-translate-y-1
+  hover:scale-[1.02]
+  hover:shadow-2xl
+  cursor-default
+">
 
         <div className="flex items-center gap-4">
 
@@ -213,51 +254,70 @@ const CommentsKPIs = ({
 
       </div>
 
-      {/* Prioridad Alta */}
+      {/* Neutrales */}
 
-      <div className="bg-[#071b3a] rounded-2xl p-5 border border-white/5 shadow-xl">
+<div className="
+  bg-[#071b3a]
+  rounded-2xl
+  p-5
+  border
+  border-white/5
+  shadow-xl
+  transition-all
+  duration-300
+  hover:-translate-y-1
+  hover:scale-[1.02]
+  hover:shadow-2xl
+  cursor-default
+">
 
-        <div className="flex items-center gap-4">
+  <div className="flex items-center gap-4">
 
-          <div
-            className="
-              w-16
-              h-16
-              rounded-2xl
-              bg-yellow-500/20
-              flex
-              items-center
-              justify-center
-              shadow-[0_0_20px_rgba(245,158,11,0.35)]
-            "
-          >
-            <AlertTriangle
-              size={30}
-              className="text-yellow-400"
-            />
-          </div>
+    <div
+      className="
+        w-16
+        h-16
+        rounded-2xl
+        bg-yellow-500/20
+        flex
+        items-center
+        justify-center
+        shadow-[0_0_20px_rgba(245,158,11,0.35)]
+      "
+    >
 
-          <div>
+      <Meh
+  size={30}
+  className="text-yellow-400"
+/>
 
-            <p className="text-slate-300 text-sm">
-              Prioridad alta
-            </p>
+    </div>
 
-            <h2 className="text-3xl font-bold text-white mt-1">
-              {prioridadAlta}
-            </h2>
+    <div>
 
-            <p className="text-slate-400 text-sm mt-2">
-              {porcentajeAlta}% del total
-            </p>
+      <p className="text-slate-300 text-sm">
+        Neutrales
+      </p>
 
-          </div>
+      <h2 className="text-3xl font-bold text-white mt-1">
+        {neutrales}
+      </h2>
+
+      <p className="text-slate-400 text-sm mt-2">
+        {porcentajeNeutrales}% del total
+      </p>
+
+    </div>
+
+  </div>
+
+
 
         </div>
 
       </div>
 
-    </div>
+  
   );
 };
 

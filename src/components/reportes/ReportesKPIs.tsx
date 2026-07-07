@@ -22,36 +22,55 @@ interface Reporte {
   fecha_generacion: string;
 }
 
-const ReportKPIs = () => {
+interface ReportKPIsProps {
+  reload: boolean;
+}
+
+const ReportKPIs = ({
+  reload,
+}: ReportKPIsProps) => {
+
   const [
     reports,
     setReports,
   ] = useState<Reporte[]>([]);
 
   useEffect(() => {
+
     let activo = true;
 
     const cargarDatos = async () => {
+
       try {
+
         const response =
           await getReports();
 
         if (activo) {
+
           setReports(
             response.reportes || []
           );
+
         }
+
       } catch (error) {
+
         console.error(error);
+
       }
+
     };
 
     cargarDatos();
 
     return () => {
+
       activo = false;
+
     };
-  }, []);
+
+  }, [reload]);
 
   const totalReportes =
     reports.length;
@@ -80,7 +99,23 @@ const ReportKPIs = () => {
       ? "PDF"
       : "Excel";
 
+  const cardClass = `
+    bg-[#071b3a]
+    rounded-2xl
+    p-4
+    border
+    border-white/5
+    shadow-xl
+    transition-all
+    duration-300
+    hover:-translate-y-1
+    hover:scale-[1.02]
+    hover:shadow-2xl
+    cursor-default
+  `;
+
   return (
+
     <div
       className="
         grid
@@ -91,16 +126,33 @@ const ReportKPIs = () => {
         mb-6
       "
     >
-      <div className="bg-[#071b3a] rounded-2xl p-4 border border-white/5 shadow-xl">
+
+      <div className={cardClass}>
+
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-blue-500/20 flex items-center justify-center">
+
+          <div
+            className="
+              w-14
+              h-14
+              rounded-2xl
+              bg-blue-500/20
+              flex
+              items-center
+              justify-center
+              shadow-[0_0_20px_rgba(59,130,246,0.35)]
+            "
+          >
+
             <FileText
               size={28}
               className="text-blue-400"
             />
+
           </div>
 
           <div>
+
             <p className="text-slate-400 text-sm">
               Reportes generados
             </p>
@@ -112,22 +164,41 @@ const ReportKPIs = () => {
             <p className="text-green-400 text-sm mt-1">
               Registrados
             </p>
+
           </div>
+
         </div>
+
       </div>
 
-      <div className="bg-[#071b3a] rounded-2xl p-4 border border-white/5 shadow-xl">
+      <div className={cardClass}>
+
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-green-500/20 flex items-center justify-center">
+
+          <div
+            className="
+              w-14
+              h-14
+              rounded-2xl
+              bg-green-500/20
+              flex
+              items-center
+              justify-center
+              shadow-[0_0_20px_rgba(34,197,94,0.35)]
+            "
+          >
+
             <Download
               size={28}
               className="text-green-400"
             />
+
           </div>
 
           <div>
+
             <p className="text-slate-400 text-sm">
-              Descargas realizadas
+              Reportes disponibles
             </p>
 
             <h2 className="text-3xl font-bold text-white">
@@ -135,22 +206,41 @@ const ReportKPIs = () => {
             </h2>
 
             <p className="text-green-400 text-sm mt-1">
-              Disponibles
+              Listos para descargar
             </p>
+
           </div>
+
         </div>
+
       </div>
 
-      <div className="bg-[#071b3a] rounded-2xl p-4 border border-white/5 shadow-xl">
+      <div className={cardClass}>
+
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-purple-500/20 flex items-center justify-center">
+
+          <div
+            className="
+              w-14
+              h-14
+              rounded-2xl
+              bg-purple-500/20
+              flex
+              items-center
+              justify-center
+              shadow-[0_0_20px_rgba(168,85,247,0.35)]
+            "
+          >
+
             <CalendarDays
               size={28}
               className="text-purple-400"
             />
+
           </div>
 
           <div>
+
             <p className="text-slate-400 text-sm">
               Último reporte
             </p>
@@ -162,20 +252,39 @@ const ReportKPIs = () => {
             <p className="text-slate-400 text-sm mt-1">
               Generado
             </p>
+
           </div>
+
         </div>
+
       </div>
 
-      <div className="bg-[#071b3a] rounded-2xl p-4 border border-white/5 shadow-xl">
+      <div className={cardClass}>
+
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-yellow-500/20 flex items-center justify-center">
+
+          <div
+            className="
+              w-14
+              h-14
+              rounded-2xl
+              bg-yellow-500/20
+              flex
+              items-center
+              justify-center
+              shadow-[0_0_20px_rgba(245,158,11,0.35)]
+            "
+          >
+
             <FileSpreadsheet
               size={28}
               className="text-yellow-400"
             />
+
           </div>
 
           <div>
+
             <p className="text-slate-400 text-sm">
               Formato principal
             </p>
@@ -187,11 +296,17 @@ const ReportKPIs = () => {
             <p className="text-slate-400 text-sm mt-1">
               Más utilizado
             </p>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
+
   );
+
 };
 
 export default ReportKPIs;

@@ -7,6 +7,9 @@ import {
   deleteComment,
   updateComment,
 } from "../../services/extractionService";
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
+
 
 interface Comentario {
   id: number;
@@ -40,12 +43,20 @@ const CommentsTable = ({
     id: number
   ) => {
 
-    const confirmar =
-      window.confirm(
-        "¿Desea eliminar este comentario?"
-      );
+   const resultado = await Swal.fire({
+  title: "¿Eliminar comentario?",
+  text: "Esta acción no se puede deshacer.",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonText: "Eliminar",
+  cancelButtonText: "Cancelar",
+  confirmButtonColor: "#2563eb",
+  cancelButtonColor: "#475569",
+  background: "#071b3a",
+  color: "#ffffff",
+});
 
-    if (!confirmar) return;
+if (!resultado.isConfirmed) return;
 
     try {
 
@@ -58,17 +69,13 @@ const CommentsTable = ({
         )
       );
 
-      alert(
-        "Comentario eliminado"
-      );
+       toast.success("Comentario eliminado correctamente.");
 
     } catch (error) {
 
       console.error(error);
 
-      alert(
-        "Error eliminando comentario"
-      );
+      toast.error("No se pudo eliminar el comentario.");
 
     }
 
@@ -120,17 +127,13 @@ const CommentsTable = ({
 
       );
 
-      alert(
-        "Comentario actualizado"
-      );
+      toast.success("Comentario actualizado correctamente.");
 
     } catch (error) {
 
       console.error(error);
 
-      alert(
-        "Error actualizando comentario"
-      );
+      toast.error("No se pudo actualizar el comentario.");
 
     }
 

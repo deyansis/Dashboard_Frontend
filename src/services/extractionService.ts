@@ -8,13 +8,27 @@ interface ExtractionFilters {
 
   fecha_fin: string;
 
-  
+  cantidad: string;
+
+  sentimiento: string;
+
+}
+
+interface HistoryFilters {
+
+  fecha_inicio: string;
+
+  fecha_fin: string;
 
   cantidad: string;
 
   sentimiento: string;
 
 }
+
+// =============================
+// EXTRAER FACEBOOK
+// =============================
 
 export const extractFacebookComments =
   async (
@@ -41,62 +55,116 @@ export const extractFacebookComments =
 
   };
 
-export const deleteComment = async (
-  id: number
-) => {
+// =============================
+// CONSULTAR HISTORIAL
+// =============================
 
-  const response = await fetch(
-    `${API_URL}/comentarios/${id}`,
-    {
-      method: "DELETE",
-    }
-  );
-
-  return response.json();
-
-};
-
-export const updateComment = async (
-  id: number,
-  sentimiento: string,
-  prioridad: string
-) => {
-
-  const response = await fetch(
-    `${API_URL}/comentarios/${id}`,
-    {
-      method: "PUT",
-
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-
-      body: JSON.stringify({
-
-        sentimiento,
-        prioridad,
-
-      }),
-
-    }
-  );
-
-  return response.json();
-
-};
 export const getComments =
-  async () => {
+  async (
+    filters: HistoryFilters
+  ) => {
+
+    const params =
+      new URLSearchParams({
+
+        fecha_inicio:
+          filters.fecha_inicio,
+
+        fecha_fin:
+          filters.fecha_fin,
+
+        cantidad:
+          filters.cantidad,
+
+        sentimiento:
+          filters.sentimiento,
+
+      });
 
     const response =
       await fetch(
-        `${API_URL}/comentarios`
+
+        `${API_URL}/comentarios?${params.toString()}`
+
       );
 
     return response.json();
 
   };
-  export const getTimeline =
+
+// =============================
+// ELIMINAR
+// =============================
+
+export const deleteComment =
+  async (
+    id: number
+  ) => {
+
+    const response =
+      await fetch(
+        `${API_URL}/comentarios/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+    return response.json();
+
+  };
+
+// =============================
+// ACTUALIZAR
+// =============================
+
+export const updateComment =
+  async (
+
+    id: number,
+
+    sentimiento: string,
+
+    prioridad: string
+
+  ) => {
+
+    const response =
+      await fetch(
+
+        `${API_URL}/comentarios/${id}`,
+
+        {
+
+          method: "PUT",
+
+          headers: {
+
+            "Content-Type":
+              "application/json",
+
+          },
+
+          body: JSON.stringify({
+
+            sentimiento,
+
+            prioridad,
+
+          }),
+
+        }
+
+      );
+
+    return response.json();
+
+  };
+
+// =============================
+// TIMELINE
+// =============================
+
+export const getTimeline =
   async () => {
 
     const response =
