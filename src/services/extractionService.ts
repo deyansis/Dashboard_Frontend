@@ -1,8 +1,5 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-// SOLO para Playwright local
-const API_LOCAL = "http://127.0.0.1:5000";
-
 interface ExtractionFilters {
   url: string;
   fecha_inicio: string;
@@ -19,7 +16,7 @@ interface HistoryFilters {
 }
 
 // =============================
-// EXTRAER FACEBOOK (LOCAL)
+// EXTRAER FACEBOOK
 // =============================
 
 export const extractFacebookComments = async (
@@ -27,7 +24,7 @@ export const extractFacebookComments = async (
 ) => {
 
   const response = await fetch(
-    `${API_LOCAL}/extraer-facebook`,
+    `${API_URL}/extraer-facebook`,
     {
       method: "POST",
       headers: {
@@ -42,7 +39,7 @@ export const extractFacebookComments = async (
 };
 
 // =============================
-// CONSULTAR HISTORIAL (RENDER)
+// CONSULTAR HISTORIAL
 // =============================
 
 export const getComments = async (
@@ -65,7 +62,7 @@ export const getComments = async (
 };
 
 // =============================
-// ELIMINAR (RENDER)
+// ELIMINAR
 // =============================
 
 export const deleteComment = async (
@@ -84,43 +81,27 @@ export const deleteComment = async (
 };
 
 // =============================
-// ACTUALIZAR (RENDER)
+// ACTUALIZAR
 // =============================
 
 export const updateComment = async (
-
   id: number,
-
   sentimiento: string,
-
   prioridad: string
-
 ) => {
 
   const response = await fetch(
-
     `${API_URL}/comentarios/${id}`,
-
     {
-
       method: "PUT",
-
       headers: {
-
         "Content-Type": "application/json",
-
       },
-
       body: JSON.stringify({
-
         sentimiento,
-
         prioridad,
-
       }),
-
     }
-
   );
 
   return response.json();
@@ -128,7 +109,7 @@ export const updateComment = async (
 };
 
 // =============================
-// TIMELINE (RENDER)
+// TIMELINE
 // =============================
 
 export const getTimeline = async () => {
