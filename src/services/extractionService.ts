@@ -1,177 +1,142 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
+// SOLO para Playwright local
+const API_LOCAL = "http://127.0.0.1:5000";
+
 interface ExtractionFilters {
-
   url: string;
-
   fecha_inicio: string;
-
   fecha_fin: string;
-
   cantidad: string;
-
   sentimiento: string;
-
 }
 
 interface HistoryFilters {
-
   fecha_inicio: string;
-
   fecha_fin: string;
-
   cantidad: string;
-
   sentimiento: string;
-
 }
 
 // =============================
-// EXTRAER FACEBOOK
+// EXTRAER FACEBOOK (LOCAL)
 // =============================
 
-export const extractFacebookComments =
-  async (
-    filters: ExtractionFilters
-  ) => {
+export const extractFacebookComments = async (
+  filters: ExtractionFilters
+) => {
 
-    const response = await fetch(
-      `${API_URL}/extraer-facebook`,
-      {
-        method: "POST",
+  const response = await fetch(
+    `${API_LOCAL}/extraer-facebook`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filters),
+    }
+  );
 
-        headers: {
-          "Content-Type":
-            "application/json",
-        },
+  return response.json();
 
-        body: JSON.stringify(
-          filters
-        ),
-      }
-    );
-
-    return response.json();
-
-  };
+};
 
 // =============================
-// CONSULTAR HISTORIAL
+// CONSULTAR HISTORIAL (RENDER)
 // =============================
 
-export const getComments =
-  async (
-    filters: HistoryFilters
-  ) => {
+export const getComments = async (
+  filters: HistoryFilters
+) => {
 
-    const params =
-      new URLSearchParams({
+  const params = new URLSearchParams({
+    fecha_inicio: filters.fecha_inicio,
+    fecha_fin: filters.fecha_fin,
+    cantidad: filters.cantidad,
+    sentimiento: filters.sentimiento,
+  });
 
-        fecha_inicio:
-          filters.fecha_inicio,
+  const response = await fetch(
+    `${API_URL}/comentarios?${params.toString()}`
+  );
 
-        fecha_fin:
-          filters.fecha_fin,
+  return response.json();
 
-        cantidad:
-          filters.cantidad,
-
-        sentimiento:
-          filters.sentimiento,
-
-      });
-
-    const response =
-      await fetch(
-
-        `${API_URL}/comentarios?${params.toString()}`
-
-      );
-
-    return response.json();
-
-  };
+};
 
 // =============================
-// ELIMINAR
+// ELIMINAR (RENDER)
 // =============================
 
-export const deleteComment =
-  async (
-    id: number
-  ) => {
+export const deleteComment = async (
+  id: number
+) => {
 
-    const response =
-      await fetch(
-        `${API_URL}/comentarios/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+  const response = await fetch(
+    `${API_URL}/comentarios/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
 
-    return response.json();
+  return response.json();
 
-  };
+};
 
 // =============================
-// ACTUALIZAR
+// ACTUALIZAR (RENDER)
 // =============================
 
-export const updateComment =
-  async (
+export const updateComment = async (
 
-    id: number,
+  id: number,
 
-    sentimiento: string,
+  sentimiento: string,
 
-    prioridad: string
+  prioridad: string
 
-  ) => {
+) => {
 
-    const response =
-      await fetch(
+  const response = await fetch(
 
-        `${API_URL}/comentarios/${id}`,
+    `${API_URL}/comentarios/${id}`,
 
-        {
+    {
 
-          method: "PUT",
+      method: "PUT",
 
-          headers: {
+      headers: {
 
-            "Content-Type":
-              "application/json",
+        "Content-Type": "application/json",
 
-          },
+      },
 
-          body: JSON.stringify({
+      body: JSON.stringify({
 
-            sentimiento,
+        sentimiento,
 
-            prioridad,
+        prioridad,
 
-          }),
+      }),
 
-        }
+    }
 
-      );
+  );
 
-    return response.json();
+  return response.json();
 
-  };
+};
 
 // =============================
-// TIMELINE
+// TIMELINE (RENDER)
 // =============================
 
-export const getTimeline =
-  async () => {
+export const getTimeline = async () => {
 
-    const response =
-      await fetch(
-        `${API_URL}/timeline`
-      );
+  const response = await fetch(
+    `${API_URL}/timeline`
+  );
 
-    return response.json();
+  return response.json();
 
-  };
+};

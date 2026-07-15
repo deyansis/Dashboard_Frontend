@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "https://dashboardbackend-production-b56a.up.railway.app";
 
 export interface Usuario {
 
