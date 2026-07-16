@@ -35,7 +35,7 @@ const CommentsKPIs = ({
   comentarios.filter(
     (item) =>
       item.sentimiento ===
-      "neutral"
+      "neutro"
   ).length;
 
   const negativos =
