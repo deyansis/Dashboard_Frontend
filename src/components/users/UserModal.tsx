@@ -76,7 +76,7 @@ onSuccess();
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
 
-      <div className="bg-[#071b3a] rounded-2xl w-full max-w-xl border border-slate-700">
+      
 
         <div className="flex justify-between items-center p-6 border-b border-slate-700">
 
@@ -94,6 +94,7 @@ onSuccess();
         </div>
 
         <div className="p-6 space-y-5">
+            <div className="bg-[#071b3a] rounded-2xl w-full max-w-xl border border-slate-700 max-h-[90vh] overflow-y-auto">
 
   <div>
     <label className="block text-sm text-slate-300 mb-2">

@@ -5,7 +5,6 @@ import {
   User,
   Mail,
   Briefcase,
-  Save,
   BadgeCheck,
   Pencil,
   Trash2,
@@ -13,9 +12,7 @@ import {
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-import { obtenerUsuario, guardarUsuario } from "../../utils/auth";
-import { actualizarPerfil } from "../../services/profileService";
+import { obtenerUsuario } from "../../utils/auth";
 import { obtenerUsuarios } from "../../services/userService";
 import UserModal from "../../components/users/UserModal";
 import EditUserModal from "../../components/users/EditUserModal";
@@ -34,48 +31,16 @@ interface Usuario {
 const ProfileSettings = () => {
   const navigate = useNavigate();
   const usuario = obtenerUsuario();
-
-  const [nombre, setNombre] = useState(usuario?.nombre ?? "");
-
-  const [correo, setCorreo] = useState(usuario?.correo ?? "");
-
-  const [cargo] = useState(usuario?.cargo ?? "");
-
-  const [registro] = useState(usuario?.numero_registro ?? "");
+  const nombre = usuario?.nombre ?? "";
+  const correo = usuario?.correo ?? "";
+  const cargo = usuario?.cargo ?? "";
+  const registro = usuario?.numero_registro ?? "";
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [usuarioEditar, setUsuarioEditar] = useState<Usuario | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [usuarioEliminar, setUsuarioEliminar] = useState<Usuario | null>(null);
-  const guardarCambios = async () => {
-    if (!usuario) {
-      toast.error("No existe un usuario autenticado.");
-
-      return;
-    }
-
-    try {
-      const respuesta = await actualizarPerfil(
-        nombre,
-
-        correo,
-
-        usuario.correo,
-      );
-
-      guardarUsuario(respuesta.usuario);
-
-      setNombre(respuesta.usuario.nombre);
-      setCorreo(respuesta.usuario.correo);
-
-      toast.success("Perfil actualizado correctamente.");
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
-  };
 
   const cargarUsuarios = async () => {
     const data = await obtenerUsuarios();
@@ -129,8 +94,8 @@ const ProfileSettings = () => {
 
                 <input
                   value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
-                  className="bg-transparent w-full outline-none text-white"
+                  disabled
+                  className="bg-transparent w-full outline-none text-slate-400 cursor-not-allowed"
                 />
               </div>
             </div>
@@ -147,8 +112,8 @@ const ProfileSettings = () => {
 
                 <input
                   value={correo}
-                  onChange={(e) => setCorreo(e.target.value)}
-                  className="bg-transparent w-full outline-none text-white"
+                  disabled
+                  className="bg-transparent w-full outline-none text-slate-400 cursor-not-allowed"
                 />
               </div>
             </div>
@@ -197,28 +162,6 @@ const ProfileSettings = () => {
                 ¿Olvidaste tu contraseña?
               </span>
             </p>
-          </div>
-
-          <div className="flex justify-end mt-10">
-            <button
-              onClick={guardarCambios}
-              className="
-                h-12
-                px-10
-                rounded-xl
-                bg-cyan-600
-                hover:bg-cyan-700
-                transition
-                text-white
-                font-semibold
-                flex
-                items-center
-                gap-2
-              "
-            >
-              <Save size={18} />
-              Guardar cambios
-            </button>
           </div>
 
           <div className="mt-12">
@@ -274,11 +217,11 @@ const ProfileSettings = () => {
                       <td className="p-4">
                         <div className="flex justify-center gap-3">
                           <button
- onClick={() => {
-  setUsuarioEditar(item);
-  setOpenEditModal(true);
-}}
-  className="
+                            onClick={() => {
+                              setUsuarioEditar(item);
+                              setOpenEditModal(true);
+                            }}
+                            className="
     w-10
     h-10
     rounded-lg
@@ -290,15 +233,15 @@ const ProfileSettings = () => {
     justify-center
     transition
   "
->
-  <Pencil size={18} />
-</button>
-<button
-  onClick={() => {
-    setUsuarioEliminar(item);
-    setOpenDeleteModal(true);
-  }}
-  className="
+                          >
+                            <Pencil size={18} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setUsuarioEliminar(item);
+                              setOpenDeleteModal(true);
+                            }}
+                            className="
     w-10
     h-10
     rounded-lg
@@ -310,9 +253,9 @@ const ProfileSettings = () => {
     justify-center
     transition
   "
->
-  <Trash2 size={18} />
-</button>
+                          >
+                            <Trash2 size={18} />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -322,32 +265,31 @@ const ProfileSettings = () => {
             </div>
           </div>
         </div>
-<UserModal
-  open={openModal}
-  onClose={() => setOpenModal(false)}
-  onSuccess={cargarUsuarios}
-/>
+        <UserModal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          onSuccess={cargarUsuarios}
+        />
 
-<EditUserModal
-  open={openEditModal}
-  usuario={usuarioEditar}
-  onClose={() => {
-    setOpenEditModal(false);
-    setUsuarioEditar(null);
-  }}
-  onSuccess={cargarUsuarios}
-/>
+        <EditUserModal
+          open={openEditModal}
+          usuario={usuarioEditar}
+          onClose={() => {
+            setOpenEditModal(false);
+            setUsuarioEditar(null);
+          }}
+          onSuccess={cargarUsuarios}
+        />
 
-<DeleteUserModal
-  open={openDeleteModal}
-  usuario={usuarioEliminar}
-  onClose={() => {
-    setOpenDeleteModal(false);
-    setUsuarioEliminar(null);
-  }}
-  onSuccess={cargarUsuarios}
-/>
-       
+        <DeleteUserModal
+          open={openDeleteModal}
+          usuario={usuarioEliminar}
+          onClose={() => {
+            setOpenDeleteModal(false);
+            setUsuarioEliminar(null);
+          }}
+          onSuccess={cargarUsuarios}
+        />
       </main>
     </div>
   );
