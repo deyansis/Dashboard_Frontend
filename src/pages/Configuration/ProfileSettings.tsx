@@ -59,15 +59,12 @@ const [registro] = useState(
 
       );
 
-    guardarUsuario(
-      respuesta.usuario
-    );
+    guardarUsuario(respuesta.usuario);
 
-    toast.success(
-      "Perfil actualizado correctamente."
-    );
+setNombre(respuesta.usuario.nombre);
+setCorreo(respuesta.usuario.correo);
 
-    window.location.reload();
+toast.success("Perfil actualizado correctamente.");
 
   } catch (error) {
 
