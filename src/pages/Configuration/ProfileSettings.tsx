@@ -9,11 +9,22 @@ import {
   BadgeCheck,
 } from "lucide-react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {obtenerUsuario,guardarUsuario,} from "../../utils/auth";
 import { actualizarPerfil } from "../../services/profileService";
+import {obtenerUsuarios,} from "../../services/userService";
+
+interface Usuario {
+  id: number;
+  nombre: string;
+  correo: string;
+  cargo: string;
+  estado: string;
+  numero_registro: string;
+  fecha_registro: string;
+}
 
 const ProfileSettings = () => {
 
@@ -35,6 +46,7 @@ const [cargo] = useState(
 const [registro] = useState(
   usuario?.numero_registro ?? ""
 );
+const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
   const guardarCambios = async () => {
 
@@ -61,6 +73,8 @@ const [registro] = useState(
 
     guardarUsuario(respuesta.usuario);
 
+    
+
 setNombre(respuesta.usuario.nombre);
 setCorreo(respuesta.usuario.correo);
 
@@ -78,6 +92,21 @@ toast.success("Perfil actualizado correctamente.");
 
 };
 
+const cargarUsuarios = async () => {
+
+  const data = await obtenerUsuarios();
+
+  setUsuarios(data);
+
+};
+
+useEffect(() => {
+
+  cargarUsuarios();
+
+}, []);
+
+console.log(usuarios);
   return (
 
     <div className="min-h-screen bg-[#050B1F] flex">
