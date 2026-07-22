@@ -4,10 +4,11 @@ interface Usuario {
   id?: number;
   nombre: string;
   correo: string;
-  password: string;
+  password?: string;
   cargo: string;
   estado: string;
-  numero_registro: string;
+
+  
 }
 
 export const obtenerUsuarios = async () => {
