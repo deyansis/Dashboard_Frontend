@@ -74,8 +74,8 @@ onSuccess();
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+       <div className="bg-[#071b3a] rounded-2xl w-full max-w-2xl border border-slate-700 max-h-[90vh] overflow-y-auto">
       
 
         <div className="flex justify-between items-center p-6 border-b border-slate-700">
@@ -94,7 +94,7 @@ onSuccess();
         </div>
 
         <div className="p-6 space-y-5">
-            <div className="bg-[#071b3a] rounded-2xl w-full max-w-xl border border-slate-700 max-h-[90vh] overflow-y-auto">
+           
 
   <div>
     <label className="block text-sm text-slate-300 mb-2">
@@ -124,19 +124,21 @@ onSuccess();
 />
   </div>
 
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
   <div>
     <label className="block text-sm text-slate-300 mb-2">
       Cargo
     </label>
 
     <select
-  value={cargo}
-  onChange={(e) => setCargo(e.target.value)}
-  className="w-full h-12 rounded-xl bg-[#091a38] border border-slate-700 px-4 text-white outline-none focus:border-cyan-500"
->
-  <option>Administrador</option>
-  <option>Analista</option>
-</select>
+      value={cargo}
+      onChange={(e) => setCargo(e.target.value)}
+      className="w-full h-12 rounded-xl bg-[#091a38] border border-slate-700 px-4 text-white outline-none focus:border-cyan-500"
+    >
+      <option>Administrador</option>
+      <option>Analista</option>
+    </select>
   </div>
 
   <div>
@@ -145,14 +147,16 @@ onSuccess();
     </label>
 
     <select
-  value={estado}
-  onChange={(e) => setEstado(e.target.value)}
-  className="w-full h-12 rounded-xl bg-[#091a38] border border-slate-700 px-4 text-white outline-none focus:border-cyan-500"
->
-  <option>Activo</option>
-  <option>Inactivo</option>
-</select>
+      value={estado}
+      onChange={(e) => setEstado(e.target.value)}
+      className="w-full h-12 rounded-xl bg-[#091a38] border border-slate-700 px-4 text-white outline-none focus:border-cyan-500"
+    >
+      <option>Activo</option>
+      <option>Inactivo</option>
+    </select>
   </div>
+
+</div>
 
   <div>
     <label className="block text-sm text-slate-300 mb-2">
