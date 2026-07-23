@@ -40,12 +40,12 @@ const PerceptionGauge = ({ filters }: PerceptionGaugeProps) => {
   }, [perception]);
 
   return (
-    <div className="bg-[#071b3a] rounded-2xl border border-white/5 h-full p-5">
+    <div className="bg-[#071b3a] rounded-2xl px-5 pb-5 pt-3 border border-white/5 h-[240px]">
       <h3 className="text-white font-semibold text-sm mb-3">
         Nivel de Percepción (por rango)
       </h3>
 
-      <div className="relative w-full aspect-[1.35]">
+      <div className="relative h-[180px] mt-4">
 
         {/* Etiquetas */}
 
