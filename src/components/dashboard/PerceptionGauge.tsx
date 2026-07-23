@@ -1,6 +1,5 @@
 import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
-
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getDashboardData } from "../../services/dashboardService";
 
 interface Filters {
@@ -20,7 +19,6 @@ const PerceptionGauge = ({ filters }: PerceptionGaugeProps) => {
     const fetchData = async () => {
       try {
         const result = await getDashboardData(filters);
-
         setPerception(result.nivel_percepcion ?? 0);
       } catch (error) {
         console.error("Error cargando percepción", error);
@@ -37,37 +35,40 @@ const PerceptionGauge = ({ filters }: PerceptionGaugeProps) => {
     },
   ];
 
+  const needleAngle = useMemo(() => {
+    return -150 + (perception * 120) / 100;
+  }, [perception]);
+
   return (
-    <div className="bg-[#071b3a] rounded-2xl px-5 pb-5 pt-3 border border-white/5 h-[240px]">
-      <h3 className="text-white font-semibold text-sm mb-2">
+    <div className="bg-[#071b3a] rounded-2xl border border-white/5 h-full p-5">
+      <h3 className="text-white font-semibold text-sm mb-3">
         Nivel de Percepción (por rango)
       </h3>
 
-      <div className="relative h-[180px] mt-4">
-        {/* MEDIO */}
+      <div className="relative w-full aspect-[1.35]">
 
-        <div className="absolute left-1/2 -translate-x-1/2 top-[-6px] z-20">
-          <span className="text-slate-300 text-sm font-medium">Medio</span>
+        {/* Etiquetas */}
+
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-slate-300 text-sm font-medium z-20">
+          Medio
         </div>
 
-        {/* BAJO */}
-
-        <div className="absolute left-14 top-[78px] z-20">
-          <span className="text-slate-300 text-sm font-medium">Bajo</span>
+        <div className="absolute left-[8%] top-[46%] text-slate-300 text-sm font-medium z-20">
+          Bajo
         </div>
 
-        {/* ALTO */}
-
-        <div className="absolute right-14 top-[78px] z-20">
-          <span className="text-slate-300 text-sm font-medium">Alto</span>
+        <div className="absolute right-[8%] top-[46%] text-slate-300 text-sm font-medium z-20">
+          Alto
         </div>
+
+        {/* Gauge */}
 
         <ResponsiveContainer width="100%" height="100%">
           <RadialBarChart
             data={data}
             startAngle={210}
             endAngle={-30}
-            innerRadius="60%"
+            innerRadius="62%"
             outerRadius="90%"
           >
             <defs>
@@ -94,60 +95,36 @@ const PerceptionGauge = ({ filters }: PerceptionGaugeProps) => {
           </RadialBarChart>
         </ResponsiveContainer>
 
-        {/* AGUJA */}
+        {/* Aguja */}
 
-        <div className="absolute left-[58%] top-[96px] -translate-x-1/2 z-30">
+        <div
+          className="absolute left-1/2 top-[53%] -translate-x-1/2 -translate-y-1/2 z-30"
+        >
           <div
-            className="
-              w-[55px]
-              h-[4px]
-              bg-white
-              rounded-full
-              origin-left
-              shadow-lg
-            "
+            className="w-[22vw] max-w-[60px] min-w-[42px] h-1 bg-white rounded-full origin-left shadow-lg transition-transform duration-500"
             style={{
-              transform: `rotate(${-155 + (perception * 150) / 100}deg)`,
+              transform: `rotate(${needleAngle}deg)`,
             }}
           />
 
-          <div
-            className="
-              w-4
-              h-4
-              rounded-full
-              bg-white
-              absolute
-              -left-1
-              -top-[6px]
-            "
-          />
+          <div className="absolute w-4 h-4 rounded-full bg-white -left-2 top-1/2 -translate-y-1/2" />
         </div>
 
-        {/* PORCENTAJE */}
+        {/* Valor */}
 
-        <div className="absolute left-1/2 top-[118px] -translate-x-1/2">
+        <div className="absolute left-1/2 top-[63%] -translate-x-1/2 text-center">
           <h2 className="text-cyan-400 text-3xl font-bold">
             {Math.round(perception)}%
           </h2>
-        </div>
 
-        {/* TEXTO */}
-
-        <div className="absolute left-1/2 top-[160px] -translate-x-1/2">
           <p
-            className={`
-              text-sm
-              font-semibold
-              whitespace-nowrap
-              ${
-                perception >= 70
-                  ? "text-green-400"
-                  : perception >= 40
-                    ? "text-yellow-400"
-                    : "text-red-400"
-              }
-            `}
+            className={`mt-2 text-sm font-semibold whitespace-nowrap ${
+              perception >= 70
+                ? "text-green-400"
+                : perception >= 40
+                  ? "text-yellow-400"
+                  : "text-red-400"
+            }`}
           >
             {perception >= 70
               ? "Percepción Alta"
@@ -156,6 +133,7 @@ const PerceptionGauge = ({ filters }: PerceptionGaugeProps) => {
                 : "Percepción Baja"}
           </p>
         </div>
+
       </div>
     </div>
   );
