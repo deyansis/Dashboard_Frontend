@@ -36,8 +36,8 @@ const PerceptionGauge = ({ filters }: PerceptionGaugeProps) => {
   ];
 
   const needleAngle = useMemo(() => {
-    return -150 + (perception * 120) / 100;
-  }, [perception]);
+  return -200 + (perception * 140) / 100;
+}, [perception]);
 
   return (
     <div className="bg-[#071b3a] rounded-2xl px-5 pb-5 pt-3 border border-white/5 h-[240px]">
@@ -98,7 +98,7 @@ const PerceptionGauge = ({ filters }: PerceptionGaugeProps) => {
         {/* Aguja */}
 
         <div
-          className="absolute left-[51%] top-[43%] -translate-x-1/2 -translate-y-1/2 z-30"
+          className="absolute left-[57%] top-[50%] -translate-x-1/2 -translate-y-1/2 z-30"
         >
           <div
             className="w-[22vw] max-w-[60px] min-w-[42px] h-1 bg-white rounded-full origin-left shadow-lg transition-transform duration-500"
