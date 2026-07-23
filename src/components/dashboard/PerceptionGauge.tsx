@@ -98,7 +98,7 @@ const PerceptionGauge = ({ filters }: PerceptionGaugeProps) => {
         {/* Aguja */}
 
         <div
-          className="absolute left-1/2 top-[43%] -translate-x-1/2 -translate-y-1/2 z-30"
+          className="absolute left-[51%] top-[43%] -translate-x-1/2 -translate-y-1/2 z-30"
         >
           <div
             className="w-[22vw] max-w-[60px] min-w-[42px] h-1 bg-white rounded-full origin-left shadow-lg transition-transform duration-500"
