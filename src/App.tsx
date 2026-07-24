@@ -1,3 +1,4 @@
+// Importacion de las herramientas de React Router
 import {
   BrowserRouter,
   Routes,
@@ -5,30 +6,26 @@ import {
   Navigate,
 } from "react-router-dom";
 
+// Importamos las páginas principales que forman parte del sistema.
 import Dashboard from "./pages/dashboard";
 import Analisis from "./pages/analisis";
 import Extraccion from "./pages/extraccion";
 import Comments from "./pages/Comments";
 import Reports from "./pages/Reports";
 
-// Login
-
+// Realizamos la importacion del Login
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/login/ProtectedRoute";
 
-
-// Configuración
+//Importamos las diferentes páginas del módulo de Configuración del sistema
 import Settings from "./pages/Configuration/Settings";
 import GeneralSettings from "./pages/Configuration/GeneralSettings";
 import ModelSettings from "./pages/Configuration/ModelSettings";
 import ProfileSettings from "./pages/Configuration/ProfileSettings";
 
-
-
+// Definimos las rutas principales del sistema y protegemos el acceso
+// a las páginas para que solo los usuarios autenticados puedan ingresar.
 function App() {
-
-  
-
   return (
     <BrowserRouter>
       <Routes>
