@@ -1,64 +1,57 @@
+// Importamos los componentes, iconos y servicios necesarios
+// para obtener y mostrar los indicadores principales del Dashboard.
 import {
   Smile,
   Frown,
   TrendingUp,
   Star,
 } from "lucide-react";
-
 import { useEffect, useState } from "react";
 import { getDashboardData } from "../../services/dashboardService";
 import KpiCard from "./KpiCard";
 
+// Definimos la estructura de los datos y las propiedades
+// que utilizará el componente para mostrar los indicadores.
 interface DashboardData {
   tasa_positiva: number;
   tasa_negativa: number;
   indice_sentimiento: number;
   nivel_percepcion: number;
 }
-
 interface Filters {
   fechaInicio: string;
   fechaFin: string;
   prioridad: string;
 }
-
 interface DashboardKPIsProps {
   filters: Filters;
 }
 
+// Consultamos los indicadores del Dashboard cada vez que
+// el usuario aplica nuevos filtros.
 const DashboardKPIs = ({
   filters,
 }: DashboardKPIsProps) => {
-
   const [dashboardData, setDashboardData] =
     useState<DashboardData | null>(null);
-
   useEffect(() => {
-
     const fetchDashboardData = async () => {
-
       try {
-
         const data =
           await getDashboardData(filters);
-
         setDashboardData(data);
-
       } catch (error) {
-
         console.error(
           "Error obteniendo dashboard:",
           error
         );
-
       }
-
     };
-
     fetchDashboardData();
-
   }, [filters]);
 
+  // Definimos los datos utilizados para representar
+ // las mini gráficas de cada indicador.
   const positivos = [
     { valor: 20 },
     { valor: 40 },
@@ -69,7 +62,6 @@ const DashboardKPIs = ({
     { valor: 60 },
     { valor: 80 },
   ];
-
   const negativos = [
     { valor: 80 },
     { valor: 70 },
@@ -80,7 +72,6 @@ const DashboardKPIs = ({
     { valor: 35 },
     { valor: 32 },
   ];
-
   const indice = [
     { valor: 10 },
     { valor: 15 },
@@ -92,6 +83,8 @@ const DashboardKPIs = ({
     { valor: 30 },
   ];
 
+  // Mostramos las tarjetas con los indicadores principales
+ // y el nivel de percepción obtenido del análisis.
   return (
     <div
       className="
